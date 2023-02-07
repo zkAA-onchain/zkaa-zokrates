@@ -1,0 +1,3 @@
+[submodule "pycrypto"]
+	path = pycrypto
+	url = https://github.com/Zokrates/pycrypto.git
