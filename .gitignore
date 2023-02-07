@@ -1,3 +1,5 @@
+inputs/
+
 node_modules
 .env
 coverage
