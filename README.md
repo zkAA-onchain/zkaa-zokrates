@@ -1,4 +1,66 @@
+# TL;DR
+
+## Setup and Deploy `verifier.sol`
+
+```bash
+$ zokrates compile -i computes/registration_verify.zok -o computes/registration
+$ zokrates compile -i computes/publication_verify.zok -o computes/publication
+```
+
+```bash
+$ zokrates setup -i computes/registration -s g16 -p computes/r_proving.key -v computes/r_verification.key
+$ zokrates setup -i computes/publication -s g16 -p computes/p_proving.key -v computes/p_verification.key
+```
+
+```bash
+$ zokrates export-verifier -i computes/r_verification.key -o contracts/r_verifier.sol
+$ zokrates export-verifier -i computes/p_verification.key -o contracts/p_verifier.sol
+```
+
+## Create sample inputs
+
+```bash
+$ python computes/create_inputs.py
+```
+
+## Create `proof.json`
+
+```bash
+$ cat inputs/registration/PrivateKey\(...).txt | xargs zokrates compute-witness -i computes/registration -o outputs/registration/r_witness -a
+```
+
+```bash
+$ cat inputs/publication/PrivateKey\(...).txt | xargs zokrates compute-witness -i computes/publication -o outputs/publication/p_witness -a
+```
+
+```bash
+$ zokrates generate-proof -i computes/registration -p computes/r_proving.key -s g16 -w outputs/registration/r_witness -b ark -j outputs/registration/r_proof.json
+```
+
+```bash
+$ zokrates generate-proof -i computes/publication -p computes/p_proving.key -s g16 -w outputs/publication/p_witness -b ark -j outputs/publication/p_proof.json
+```
+
+<!-- Use ark -->
+
+
+## Verify Proof
+
+```bash
+$ npx hardhat node
+```
+
+```bash
+$ npx hardhat test benchmark/register.js --network localhost
+```
+
+```bash
+$ npx hardhat test benchmark/publish.js --network localhost
+```
+
 # How to Use
+
+Example: EdDSA
 
 ## Requirements
 
@@ -69,7 +131,7 @@ $ npx hardhat node
 ```
 
 ```bash
-npx hardhat test benchmark/eddsa.js --network localhost
+$ npx hardhat test benchmark/eddsa.js --network localhost
 ```
 
 ---

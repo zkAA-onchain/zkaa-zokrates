@@ -1,0 +1,20 @@
+/// import "hashes/sha256/512bitPacked" as sha256packed;
+import "hashes/sha256/1024bitPadded" as sha256;
+import "utils/pack/u32/nonStrictUnpack256" as unpack256u;
+import "utils/pack/u32/pack128" as pack128;
+
+
+def main(private field[2] R, private field S, field[2] h) {
+	u32[8] Rx = unpack256u(R[0]);
+    u32[8] Ry = unpack256u(R[1]);
+	u32[8] s = unpack256u(S);
+	u32[8] r = sha256(unpack256u(0), Rx, Ry, s);
+	
+	field[2] h_sig = [
+		pack128(r[0..4]),
+		pack128(r[4..8])
+	];
+	assert(h_sig[0] == h[0] && h_sig[1] == h[1]);
+
+    return;
+}
