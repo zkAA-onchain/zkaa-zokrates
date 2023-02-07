@@ -1,0 +1,27 @@
+{
+  "name": "zkaa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukepark327/zkAA.git"
+  },
+  "author": "lukepark327@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lukepark327/zkAA/issues"
+  },
+  "homepage": "https://github.com/lukepark327/zkAA#readme",
+  "dependencies": {
+    "hardhat": "^2.12.6"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.1",
+    "hardhat-contract-sizer": "^2.8.0",
+    "hardhat-gas-reporter": "^1.0.9"
+  }
+}
