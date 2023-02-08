@@ -8,7 +8,7 @@ from pycrypto.zokrates_pycrypto.eddsa import PrivateKey, PublicKey
 from pycrypto.zokrates_pycrypto.utils import to_bytes
 
 
-ROUNDS = 1
+ROUNDS = 100
 
 
 def sha256(*args):
@@ -73,8 +73,8 @@ if __name__ == "__main__":
         h = sha256(0, sig_R.x, sig_R.y, sig_S)
 
         # save args
-        r_path = f"inputs/registration/{sk}.txt"
+        r_path = f"inputs/registration/{i}.txt"
         write_registration_for_zokrates_cli(pk, sig, msg, h, r_path)
 
-        p_path = f"inputs/publication/{sk}.txt"
+        p_path = f"inputs/publication/{i}.txt"
         write_publication_for_zokrates_cli(sig, h, p_path)

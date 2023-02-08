@@ -1,4 +1,6 @@
 inputs/
+witnesses/
+proofs/
 
 node_modules
 .env

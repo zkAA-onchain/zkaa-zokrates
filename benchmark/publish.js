@@ -1,8 +1,14 @@
 const { expect } = require("chai");
 
-const proof = require("../outputs/publication/p_proof.json");
+const fs = require('fs');
 
-describe("Publication", function () {
+const proofs = []
+const prooflist = fs.readdirSync("proofs/publication");
+prooflist.forEach(function (f) {
+    proofs.push(require("../proofs/publication/" + f));
+});
+
+describe("Publish", function () {
     let signer = {
         "tester": null
     };
@@ -30,11 +36,14 @@ describe("Publication", function () {
             await set();
             await deploy();
 
-            let r = await contract.verifier.verifyTx(
-                proof.proof,
-                proof.inputs
-            );
-            expect(r).to.equal(true);
+            for (proof of proofs) {
+                let r = await contract.verifier.verifyTx(
+                    proof.proof,
+                    proof.inputs
+                );
+                await r.wait();
+                // expect(r).to.equal(true);
+            }
         });
     });
 });

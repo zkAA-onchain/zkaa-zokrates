@@ -1,13 +1,19 @@
-rm -rf inputs
-rm -rf outputs
+npx hardhat clean
 
+rm -rf inputs
 mkdir inputs
 mkdir inputs/registration
 mkdir inputs/publication
 
-mkdir outputs
-mkdir outputs/registration
-mkdir outputs/publication
+rm -rf witnesses
+mkdir witnesses
+mkdir witnesses/registration
+mkdir witnesses/publication
+
+rm -rf proofs
+mkdir proofs
+mkdir proofs/registration
+mkdir proofs/publication
 
 rm computes/registration
 rm computes/publication

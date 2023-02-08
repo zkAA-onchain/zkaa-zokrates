@@ -1,66 +1,78 @@
 # TL;DR
 
-## Setup and Deploy `verifier.sol`
-
 ```bash
-$ zokrates compile -i computes/registration_verify.zok -o computes/registration
-$ zokrates compile -i computes/publication_verify.zok -o computes/publication
-```
+# clean, setup and (Benchmark) deploy `verifier.sol`
+# (default) g16
+# create sample inputs
+$ sh reset.sh
 
-```bash
-$ zokrates setup -i computes/registration -s g16 -p computes/r_proving.key -v computes/r_verification.key
-$ zokrates setup -i computes/publication -s g16 -p computes/p_proving.key -v computes/p_verification.key
-```
+# (Benchmark) create witnesses and proofs
+$ python computes/create_proofs.py
 
-```bash
-$ zokrates export-verifier -i computes/r_verification.key -o contracts/r_verifier.sol
-$ zokrates export-verifier -i computes/p_verification.key -o contracts/p_verifier.sol
-```
+w_r: Min   3.7511, Max   3.9998, Avg   3.8381 (SD:   0.0474), MED   3.8300
+w_p: Min   1.7636, Max   1.9181, Avg   1.8132 (SD:   0.0285), MED   1.8098
+p_r: Min   5.4607, Max  11.8173, Avg   5.7365 (SD:   0.6323), MED   5.6348
+p_p: Min   2.5685, Max   2.9915, Avg   2.6759 (SD:   0.0640), MED   2.6668
 
-## Create sample inputs
-
-```bash
-$ python computes/create_inputs.py
-```
-
-## Create `proof.json`
-
-```bash
-$ cat inputs/registration/PrivateKey\(...).txt | xargs zokrates compute-witness -i computes/registration -o outputs/registration/r_witness -a
-```
-
-```bash
-$ cat inputs/publication/PrivateKey\(...).txt | xargs zokrates compute-witness -i computes/publication -o outputs/publication/p_witness -a
-```
-
-```bash
-$ zokrates generate-proof -i computes/registration -p computes/r_proving.key -s g16 -w outputs/registration/r_witness -b ark -j outputs/registration/r_proof.json
-```
-
-```bash
-$ zokrates generate-proof -i computes/publication -p computes/p_proving.key -s g16 -w outputs/publication/p_witness -b ark -j outputs/publication/p_proof.json
-```
-
-<!-- Use ark -->
-
-
-## Verify Proof
-
-```bash
-$ npx hardhat node
-```
-
-```bash
+# (Benchmark) verify proofs
 $ npx hardhat test benchmark/register.js --network localhost
-```
-
-```bash
 $ npx hardhat test benchmark/publish.js --network localhost
 ```
 
-# How to Use
+For benchmarking, please remove `view` at `verifyTx`, in `Verifier`.
 
-Example: EdDSA
+
+```bash
+Compiled 2 Solidity files successfully
+ ·------------------------|---------------------------|----------------·
+ |  Solc version: 0.8.17  ·  Optimizer enabled: true  ·  Runs: 200     │
+ ·························|···························|·················
+ |  Contract Name         ·  Size (KiB)               ·  Change (KiB)  │
+ ·························|···························|·················
+ |  Pairing               ·                    0.084  ·                │
+ ·························|···························|·················
+ |  Pairing               ·                    0.084  ·                │
+ ·························|···························|·················
+ |  Verifier              ·                    3.928  ·                │
+ ·························|···························|·················
+ |  Verifier              ·                    6.135  ·                │
+ ·------------------------|---------------------------|----------------·
+```
+
+```bash
+·--------------------------------------------------|---------------------------|-------------|----------------------------·
+|               Solc version: 0.8.17               ·  Optimizer enabled: true  ·  Runs: 200  ·  Block limit: 6718946 gas  │
+···················································|···························|·············|·····························
+|  Methods                                                                                                                │
+······································|············|·············|·············|·············|··············|··············
+|  Contract                           ·  Method    ·  Min        ·  Max        ·  Avg        ·  # calls     ·  usd (avg)  │
+······································|············|·············|·············|·············|··············|··············
+|  contracts/r_verifier.sol:Verifier  ·  verifyTx  ·     387456  ·     387516  ·     387494  ·         100  ·          -  │
+······································|············|·············|·············|·············|··············|··············
+|  Deployments                                     ·                                         ·  % of limit  ·             │
+···················································|·············|·············|·············|··············|··············
+|  contracts/r_verifier.sol:Verifier               ·          -  ·          -  ·    1410472  ·        21 %  ·          -  │
+·--------------------------------------------------|-------------|-------------|-------------|--------------|-------------·
+```
+
+```bash
+·--------------------------------------------------|---------------------------|-------------|----------------------------·
+|               Solc version: 0.8.17               ·  Optimizer enabled: true  ·  Runs: 200  ·  Block limit: 6718946 gas  │
+···················································|···························|·············|·····························
+|  Methods                                                                                                                │
+······································|············|·············|·············|·············|··············|··············
+|  Contract                           ·  Method    ·  Min        ·  Max        ·  Avg        ·  # calls     ·  usd (avg)  │
+······································|············|·············|·············|·············|··············|··············
+|  contracts/p_verifier.sol:Verifier  ·  verifyTx  ·     239906  ·     239966  ·     239953  ·         100  ·          -  │
+······································|············|·············|·············|·············|··············|··············
+|  Deployments                                     ·                                         ·  % of limit  ·             │
+···················································|·············|·············|·············|··············|··············
+|  contracts/p_verifier.sol:Verifier               ·          -  ·          -  ·     921902  ·      13.7 %  ·          -  │
+·--------------------------------------------------|-------------|-------------|-------------|--------------|-------------·
+```
+
+
+# Example: EdDSA
 
 ## Requirements
 
