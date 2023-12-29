@@ -24,26 +24,35 @@ describe("Register", function () {
     }
 
     async function deploy() {
-        process.stdout.write("Deploy Verifier");
-        const Verifier = await ethers.getContractFactory("contracts/r_verifier.sol:Verifier", signer.tester);
+        process.stdout.write("Victor");
+        const Verifier = await ethers.getContractFactory("R_Benchmark", signer.tester);
         contract.verifier = await Verifier.deploy();
         await contract.verifier.deployed();
         console.log(":\t", contract.verifier.address);
     }
 
-    describe("Test", function () {
+    describe("Benchmark Gas Used", function () {
         it("Verify", async function () {
             await set();
             await deploy();
 
+            let gasUsed = [];
             for (let proof of proofs) {
-                let r = await contract.verifier.verifyTx(
+                let r = await contract.verifier.r_verifyTx(
                     proof.proof,
                     proof.inputs
                 );
                 await r.wait();
                 // expect(r).to.equal(true);
+
+                gasUsed.push(await contract.verifier.gasUsed());
             }
+
+            const averageGasUsed = gasUsed.reduce((p, c) => {
+                return p.add(c);
+            }).div(gasUsed.length);
+
+            console.log(`Average: ${averageGasUsed}`);
         });
     });
 });

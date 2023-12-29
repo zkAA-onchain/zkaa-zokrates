@@ -1,7 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox");
 
-require('hardhat-contract-sizer');
-require("hardhat-gas-reporter");
+// require('hardhat-contract-sizer');
+// require("hardhat-gas-reporter");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200,
+        runs: 2 ** 32 - 1
       },
     },
   },
@@ -18,15 +18,15 @@ module.exports = {
   paths: {
     sources: './contracts',
   },
-  
-  gasReporter: {
-    enabled: true,
-    // outputFile: './gasReport',
-  },
-  contractSizer: {
-    runOnCompile: true,
-    // outputFile: './contractSize',
-  },
+
+  // gasReporter: {
+  //   enabled: true,
+  //   // outputFile: './gasReport',
+  // },
+  // contractSizer: {
+  //   runOnCompile: true,
+  //   // outputFile: './contractSize',
+  // },
 
   mocha: {
     timeout: 100000000
@@ -37,7 +37,8 @@ module.exports = {
     hardhat: {
       forking: {
         enabled: true,
-        url: 'https://rpc.ankr.com/polygon',
+        url: 'https://rpc.ankr.com/eth',
+        blockNumber: 18887520
       },
     },
     localhost: {
