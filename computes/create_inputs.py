@@ -4,6 +4,8 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
+from random import getrandbits
+
 from pycrypto.zokrates_pycrypto.eddsa import PrivateKey, PublicKey
 from pycrypto.zokrates_pycrypto.utils import to_bytes
 
@@ -17,16 +19,22 @@ def sha256(*args):
     return digest
 
 
-def write_registration_for_zokrates_cli(pk, sig, cert, h_cert, path):
+def write_registration_for_zokrates_cli(pk, sig, cert, path):
     sig_R, sig_S = sig
     args = [sig_R.x, sig_R.y, sig_S, pk.p.x.n, pk.p.y.n]
     args = " ".join(map(str, args))
+
+    # random_bytes = getrandbits(254)
+    random_bytes = getrandbits(127)
+    args = args + " " + str(random_bytes)
 
     M0 = cert.hex()[:64]
     M1 = cert.hex()[64:]
     b0 = [str(int(M0[i:i+8], 16)) for i in range(0,len(M0), 8)]
     b1 = [str(int(M1[i:i+8], 16)) for i in range(0,len(M1), 8)]
     args = args + " " + " ".join(b0 + b1)
+
+    h_cert = sha256(random_bytes, sig_R.x, sig_R.y, sig_S)
 
     h0 = h_cert.hex()[:32]
     h1 = h_cert.hex()[32:]
@@ -37,10 +45,16 @@ def write_registration_for_zokrates_cli(pk, sig, cert, h_cert, path):
             file.write(l)
 
 
-def write_publication_for_zokrates_cli(sig, h_cert, h_msg, path):
+def write_publication_for_zokrates_cli(sig, h_msg, path):
     sig_R, sig_S = sig
     args = [sig_R.x, sig_R.y, sig_S]
     args = " ".join(map(str, args))
+
+    # random_bytes = getrandbits(254)
+    random_bytes = getrandbits(127)
+    args = args + " " + str(random_bytes)
+
+    h_cert = sha256(random_bytes, sig_R.x, sig_R.y, sig_S)
 
     h0 = h_cert.hex()[:32]
     h1 = h_cert.hex()[32:]
@@ -74,7 +88,6 @@ if __name__ == "__main__":
 
         # H(JWT)
         sig_R, sig_S = sig
-        h_cert = sha256(0, sig_R.x, sig_R.y, sig_S)
         
         # msg
         # with m
@@ -83,7 +96,7 @@ if __name__ == "__main__":
 
         # save args
         r_path = f"inputs/registration/{i}.txt"
-        write_registration_for_zokrates_cli(pk, sig, cert, h_cert, r_path)
+        write_registration_for_zokrates_cli(pk, sig, cert, r_path)
 
         p_path = f"inputs/publication/{i}.txt"
-        write_publication_for_zokrates_cli(sig, h_cert, h_msg, p_path)
+        write_publication_for_zokrates_cli(sig, h_msg, p_path)

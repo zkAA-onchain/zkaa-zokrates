@@ -36,7 +36,7 @@ describe("Register", function () {
             await set();
             await deploy();
 
-            for (proof of proofs) {
+            for (let proof of proofs) {
                 let r = await contract.verifier.verifyTx(
                     proof.proof,
                     proof.inputs

@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/lukepark327/zkAA#readme",
   "dependencies": {
-    "hardhat": "^2.12.6"
+    "hardhat": "^2.19.4"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.1",
