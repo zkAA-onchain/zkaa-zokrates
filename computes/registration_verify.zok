@@ -12,6 +12,7 @@ import "utils/pack/u32/pack128" as pack128;
 ///    R: Curve point. Hidden version of the per-message nonce.
 ///    S: Field element. Signature to be verified.
 ///    A: Curve point. Public part of the key used to create S. Public key.
+///    Rand: Random value.
 ///    M0: 256bit array. First 256bits of the message used to create S.
 ///    M1: 256bit array. Trailing 256bits of the message used to create S.
 ///    context: Curve parameters used to create S.

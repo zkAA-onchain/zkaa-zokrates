@@ -1,5 +1,8 @@
 # TL;DR
 
+- Use Python 3.8.13.
+- Install requirements by `pip install -r requirements.txt`.
+
 ```bash
 $ sh run.sh
 ```
