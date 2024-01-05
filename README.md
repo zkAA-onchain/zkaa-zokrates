@@ -14,25 +14,43 @@ $ sh reset.sh
 ```
 
 ```bash
+# (Benchmark) circuits
+
+Compiled code written to 'computes/registration'
+Number of constraints: 172772
+
+Compiled code written to 'computes/publication'
+Number of constraints: 79529
+```
+
+```bash
 # (Benchmark) create witnesses and proofs
 # default: g16
 
 $ python computes/create_proofs.py
 
-w_r: Min   3.8539, Max   4.1937, Avg   3.9313 (SD:   0.0574), MED   3.9172
-w_p: Min   1.9225, Max   2.1272, Avg   1.9551 (SD:   0.0280), MED   1.9507
-p_r: Min   5.6837, Max   7.5084, Avg   5.8884 (SD:   0.2891), MED   5.7857
-p_p: Min   2.7790, Max   2.9263, Avg   2.8386 (SD:   0.0327), MED   2.8331
+w_r: Min   3.8758, Max   4.2994, Avg   3.9449 (SD:   0.0626), MED   3.9323
+w_p: Min   1.9393, Max   2.1154, Avg   1.9803 (SD:   0.0318), MED   1.9735
+p_r: Min   5.8174, Max   6.7517, Avg   6.0792 (SD:   0.1573), MED   6.0709
+p_p: Min   2.8198, Max   3.3376, Avg   2.9251 (SD:   0.0976), MED   2.8958
 ```
 
 ```bash
 # (Benchmark) verify proofs
 
 $ npx hardhat test benchmark/register.js --network hardhat
+
+Min: 351563
+Max: 351563
+Average (std): 351563.0 (0.0 = sqrt(0.0))
+Median: 351563.0
+
 $ npx hardhat test benchmark/publish.js --network hardhat
 
-Average: 351563
-Average: 227097
+Min: 227097
+Max: 227097
+Average (std): 227097.0 (0.0 = sqrt(0.0))
+Median: 227097.0
 ```
 
 ---
