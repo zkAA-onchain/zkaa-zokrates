@@ -1,3 +1,11 @@
+# ⚠️ NOTICE
+
+These implementations are no longer maintained.
+
+Please refer to the [zkaa-circom](https://github.com/zkAA-onchain/zkaa-circom) repository for the latest updates.
+
+---
+
 # TL;DR
 
 - Use Python 3.8.13.
